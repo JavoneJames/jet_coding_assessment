@@ -3,7 +3,11 @@ import pytest # type: ignore
 from find_restaurant_data.fetch_data_by_postcode import validate_postcode, get_postcode_data, check_response_status_code, filter_received_data, extract_relevant_data_points
 
 def test_validate_postcode():
-    pass
+    assert validate_postcode("ECM7RF") == True
+    assert validate_postcode("12344") == False
+    assert validate_postcode("NE97YT") == True
+    assert validate_postcode("") == False
+    assert validate_postcode(None) == False
 
 def test_get_postcode_data():
     pass
