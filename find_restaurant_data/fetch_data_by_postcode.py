@@ -35,13 +35,14 @@ def get_postcode_data(url: str, postcode: str):
         response = requests.get(url=f"{url}{postcode}", headers=headers)
         if not check_response_status_code(response.status_code):
             raise RuntimeError(f"Invalid status code: {response.status_code}")
+        filter_received_data(response.json())
     except requests.RequestException as e:
         raise Exception(f"API request failed: {e}")
 
 
 # filter the received data to focus on restaurant data
-def filter_received_data():
-    pass
+def filter_received_data(response):
+    print(response['restaurants'][0])
 
 
 # from these restaurant object extract Name, Cuisines, Rating -as a number, and Address
