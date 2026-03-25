@@ -1,7 +1,15 @@
 import requests
 
+# check if the postcode is valid based on UK format
+def validate_postcode():
+    pass
+
 # send a 'get' requests ot the api using a postcode
 def get_postcode_data():
+    pass
+
+# check response status code
+def check_response_status_code():
     pass
 
 # filter the received data to focus on restaurant data
