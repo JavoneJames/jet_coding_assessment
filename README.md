@@ -35,6 +35,7 @@ The following will probably be used to form test cases
 
 - How to handle non 200 status code response
 - What to do if the url provided is not valid
+- Rating is expected to be a number, need to consider if the data type returned is not int
 - What to do if data points from a specific restaurant object is none, null, or invalid
 - How to ensure a postcode is valid
 - What to do if a postcode is invalid
