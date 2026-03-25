@@ -10,10 +10,10 @@ def test_validate_postcode():
     assert validate_postcode(None) == False
 
 def test_check_response_status_code():
-    assert check_response_status_code() == 200
-    assert check_response_status_code != 200
-    assert check_response_status_code == 403
-    assert check_response_status_code == 408
+    assert check_response_status_code(200) == 200
+    assert check_response_status_code(401) != 200
+    assert check_response_status_code(403) == 403
+    assert check_response_status_code(408) == 408
 
 def test_get_postcode_data():
     pass
