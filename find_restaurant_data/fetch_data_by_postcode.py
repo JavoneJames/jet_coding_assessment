@@ -1,6 +1,6 @@
 import requests
 import re
-POST_CODE = "ECM7RF"
+POST_CODE = "EC4M7RF"
 
 # check if the postcode is valid based on UK format
 def validate_postcode(postcode: str) -> bool:
