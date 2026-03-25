@@ -9,10 +9,10 @@ def test_validate_postcode():
     assert validate_postcode("") == False
     assert validate_postcode(None) == False
 
-def test_get_postcode_data():
+def test_check_response_status_code():
     pass
 
-def test_check_response_status_code():
+def test_get_postcode_data():
     pass
 
 def test_filter_received_data():
