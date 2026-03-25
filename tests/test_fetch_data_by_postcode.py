@@ -21,6 +21,6 @@ def test_filter_received_data():
 def test_extract_relevant_data_points():
     pass
 
-def test():
-    print(pytest.__version__)
+# def test():
+#     print(pytest.__version__)
 
