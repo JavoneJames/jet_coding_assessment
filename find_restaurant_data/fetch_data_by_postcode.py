@@ -52,13 +52,13 @@ def filter_received_data(data: dict) -> list:
 def extract_relevant_data_points(filtered_restaurants_data: list) -> dict:
     extracted_data_points = {}
     for restaurant in filtered_restaurants_data:
-        
+        id = restaurant.get("id")
         cuisines = [cuisine for cuisine in restaurant.get("cuisines")]
         rating = restaurant.get("rating").get("starRating")
         address = restaurant.get("address")
         full_address = ", ".join(
             part
-            for part in  [
+            for part in [
                 address.get("firstLine"),
                 address.get("city"),
                 address.get("postCode"),
@@ -66,17 +66,19 @@ def extract_relevant_data_points(filtered_restaurants_data: list) -> dict:
             if part
         )
 
-        extracted_data_points = {
+        extracted_data_points[id] = {
             "name": restaurant.get("name"),
             "cuisines": cuisines,
             "rating": rating,
-            "address": full_address
+            "address": full_address,
         }
+
         if len(extracted_data_points) == 10:
             break
+
     return extracted_data_points
-    
+
 
 data = get_postcode_data(API_URL, POST_CODE)
 filtered_data = filter_received_data(data)
-extract_relevant_data_points(filtered_data)
+temp = extract_relevant_data_points(filtered_data)
