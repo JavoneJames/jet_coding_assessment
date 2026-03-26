@@ -91,5 +91,8 @@ def test_filter_received_data():
         assert result == RECEIVED_DATA
 
 def test_extract_relevant_data_points():
-    pass
- 
+    with patch("find_restaurant_data.fetch_data_by_postcode.extract_relevant_data_points") as mock_extract:
+        filtered_data = RECEIVED_DATA['restaurants']
+        mock_extract.return_value = filtered_data 
+        result = mock_extract(filtered_data)
+        assert result == filtered_data
