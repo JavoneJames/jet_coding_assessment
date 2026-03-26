@@ -44,14 +44,25 @@ def filter_received_data(data: dict) -> list:
     return restaurants
 
 # from these restaurant object extract Name, Cuisines, Rating -as a number, and Address
-def extract_relevant_data_points(filtered_data: list) -> str | int | tuple:
-    name = filtered_data[0].get('name')
-    address = filtered_data[0].get('address')
-    city, first_line, post_code = address.get('city'), address.get('firstLine'), address.get('postCode')
-    rating = filtered_data[0].get('rating').get('starRating')
-    cuisines = filtered_data[0].get('cuisines')
-    return name, first_line, city, post_code, rating, cuisines
+def extract_relevant_data_points(filtered_data: list) -> dict:
+    extracted_data_points = {}
+    for i in range(min(10, len(filtered_data))):
+        data = filtered_data[i]
+        
+        address = data.get('address')
+        full_address = ", ".join(
+            part for part in [address.get('firstLine'), address.get('city'), address.get('postCode')]
+            if part
+        )
 
+        extracted_data_points[i] = {
+            "name": data.get('name'),
+            "address": full_address,
+            "rating": data.get('rating').get('starRating'),
+        "cuisines": data.get('cuisines')
+        }
+    return extracted_data_points
+    
 data = get_postcode_data(API_URL, POST_CODE)
 filtered_data = filter_received_data(data)
 extract_relevant_data_points(filtered_data)
