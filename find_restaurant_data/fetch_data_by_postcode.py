@@ -44,8 +44,9 @@ def filter_received_data(data: dict) -> list:
     return restaurants
 
 # from these restaurant object extract Name, Cuisines, Rating -as a number, and Address
-def extract_relevant_data_points():
-    pass
+def extract_relevant_data_points(filtered_data):
+    pass 
 
 data = get_postcode_data(API_URL, POST_CODE)
 filtered_data = filter_received_data(data)
+extract_relevant_data_points(filtered_data)
