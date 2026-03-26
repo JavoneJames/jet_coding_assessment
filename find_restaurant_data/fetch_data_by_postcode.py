@@ -7,6 +7,7 @@ API_URL = "https://uk.api.just-eat.io/discovery/uk/restaurants/enriched/bypostco
 user_agent = "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Mobile Safari/537.36"
 headers = {"User-Agent": user_agent}
 
+
 # check if the postcode is valid based on UK format
 def validate_postcode(postcode: str) -> bool:
     if not postcode or not isinstance(postcode, str):
@@ -20,9 +21,11 @@ def validate_postcode(postcode: str) -> bool:
     )
     return bool(re.match(pattern=pattern, string=postcode))
 
+
 # check response status code
 def check_response_status_code(status) -> bool:
     return status == 200
+
 
 # send a 'get' requests ot the api using a postcode
 def get_postcode_data(url: str, postcode: str) -> dict:
@@ -36,33 +39,44 @@ def get_postcode_data(url: str, postcode: str) -> dict:
     except requests.RequestException as e:
         raise Exception(f"API request failed: {e}")
 
+
 # filter the received data to focus on restaurant data
 def filter_received_data(data: dict) -> list:
-    restaurants = data.get('restaurants')
+    restaurants = data.get("restaurants")
     if not restaurants:
         raise ValueError("Restaurant object is empty")
     return restaurants
 
+
 # from these restaurant object extract Name, Cuisines, Rating -as a number, and Address
-def extract_relevant_data_points(filtered_data: list) -> dict:
+def extract_relevant_data_points(filtered_restaurants_data: list) -> dict:
     extracted_data_points = {}
-    for i in range(min(10, len(filtered_data))):
-        data = filtered_data[i]
+    for restaurant in filtered_restaurants_data:
         
-        address = data.get('address')
+        cuisines = [cuisine for cuisine in restaurant.get("cuisines")]
+        rating = restaurant.get("rating").get("starRating")
+        address = restaurant.get("address")
         full_address = ", ".join(
-            part for part in [address.get('firstLine'), address.get('city'), address.get('postCode')]
+            part
+            for part in  [
+                address.get("firstLine"),
+                address.get("city"),
+                address.get("postCode"),
+            ]
             if part
         )
 
-        extracted_data_points[i] = {
-            "name": data.get('name'),
-            "address": full_address,
-            "rating": data.get('rating').get('starRating'),
-        "cuisines": data.get('cuisines')
+        extracted_data_points = {
+            "name": restaurant.get("name"),
+            "cuisines": cuisines,
+            "rating": rating,
+            "address": full_address
         }
+        if len(extracted_data_points) == 10:
+            break
     return extracted_data_points
     
+
 data = get_postcode_data(API_URL, POST_CODE)
 filtered_data = filter_received_data(data)
 extract_relevant_data_points(filtered_data)
