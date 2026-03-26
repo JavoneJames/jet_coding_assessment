@@ -14,11 +14,38 @@ API_URL = "http://fakeurl.com/"
 POST_CODE = "SE1 9AD"
 USER_AGENT = "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Mobile Safari/537.36"
 headers = {"User-Agent": USER_AGENT}
-RECEIVED_DATA = {
+
+OBJECT_DATA = {
     "metaData": {},
     "restaurants": [],
     "deliveryFees": {},
     "promotedPlacement": [],
+    "filters": {},
+    "layout": {},
+    "enrichedLists": [],
+}
+
+RECEIVED_DATA = {
+    "metaData": {},
+    "restaurants": [
+        {
+            "id": 1000,
+            "name": f"Test Restaurant",
+            "address": {
+                "city": "London",
+                "firstLine": "Example Street",
+                "postCode": "SE1 9AD",
+            },
+            "rating": {
+                "starRating": 5,
+            },
+            "cuisines": {
+                "name": "sample",
+            },
+        }
+    ],
+    "deliveryFees": {},
+    "promotedPlacement": {},
     "filters": {},
     "layout": {},
     "enrichedLists": [],
@@ -44,7 +71,7 @@ def test_get_postcode_data():
 
         mock_response = MagicMock()
         mock_response.status_code = 200
-        mock_response.json.return_value = RECEIVED_DATA
+        mock_response.json.return_value = OBJECT_DATA
         mock_get.return_value = mock_response
         
         data = get_postcode_data(API_URL, POST_CODE)
@@ -57,8 +84,12 @@ def test_get_postcode_data():
         assert set(data.keys()) == set(expected_keys)
 
 def test_filter_received_data():
-    pass 
+    with patch("find_restaurant_data.fetch_data_by_postcode.filter_received_data") as mock_filter:
+        mock_filter.return_value = RECEIVED_DATA
+        result = mock_filter(RECEIVED_DATA)
+        mock_filter.assert_called_once_with(RECEIVED_DATA) 
+        assert result == RECEIVED_DATA
 
 def test_extract_relevant_data_points():
     pass
-
+ 
