@@ -25,7 +25,7 @@ def check_response_status_code(status) -> bool:
     return status == 200
 
 # send a 'get' requests ot the api using a postcode
-def get_postcode_data(url: str, postcode: str) -> object:
+def get_postcode_data(url: str, postcode: str) -> dict:
     if not validate_postcode(postcode):
         raise ValueError(f"Invalid postcode: {postcode}")
     try:
@@ -37,13 +37,15 @@ def get_postcode_data(url: str, postcode: str) -> object:
         raise Exception(f"API request failed: {e}")
 
 # filter the received data to focus on restaurant data
-def filter_received_data(response):
-    print(response['restaurants'][0])
+def filter_received_data(data: dict) -> list:
+    restaurants = data.get('restaurants')
+    if not restaurants:
+        raise ValueError("Restaurant object is empty")
+    return restaurants
 
 # from these restaurant object extract Name, Cuisines, Rating -as a number, and Address
 def extract_relevant_data_points():
     pass
 
 data = get_postcode_data(API_URL, POST_CODE)
-print(data)
-# print(validate_postcode(POST_CODE))
+filtered_data = filter_received_data(data)
