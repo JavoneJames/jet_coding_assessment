@@ -9,3 +9,5 @@ dependencies = [
     "pytest>=9.0.2",
     "requests>=2.32.5",
 ]
+[tool.fastapi]
+entrypoint = "backend.main:app"
