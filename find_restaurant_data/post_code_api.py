@@ -53,7 +53,6 @@ class POST_CODE_API:
             id = restaurant.get("id")
             cuisines = [cuisine["name"] for cuisine in restaurant.get("cuisines") if cuisine["name"] not in NON_CUISINE_CATEGORIES ]
             rating = restaurant.get("rating").get("starRating")
-            print(restaurant.get("address"))
             address = restaurant.get("address")
             full_address = ", ".join(
                 part
