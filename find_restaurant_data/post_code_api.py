@@ -75,12 +75,21 @@ class POST_CODE_API:
                 break
 
         return extracted_data_points
+    
+    # print restaurants info to console
+    def print_restaurants_info(self, restaurants_data):
+        for restaurant in restaurants_data.values():
+            print(f"Name: {restaurant['name']}")
+            print(f"Cuisines: {', '.join(restaurant['cuisines'])}")
+            print(f"Rating: {restaurant['rating']}")
+            print(f"Address: {restaurant['address']}")
+            print("-" * 40)
 
 if  __name__ == '__main__':
     pc_api = POST_CODE_API()
     pc_api.validate_postcode(POST_CODE)
-    data = pc_api.get_postcode_data(API_URL, POST_CODE)
-    filtered_data = pc_api.filter_received_data(data)
-    temp = pc_api.extract_relevant_data_points(filtered_data)
-    print(temp)
+    received_data = pc_api.get_postcode_data(API_URL, POST_CODE)
+    filtered_data = pc_api.filter_received_data(received_data)
+    restaurants_data = pc_api.extract_relevant_data_points(filtered_data)
+    pc_api.print_restaurants_info(restaurants_data) 
     
