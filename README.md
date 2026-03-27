@@ -40,3 +40,4 @@ The following will probably be used to form test cases
 - How to ensure a postcode is valid
 - What to do if a postcode is invalid
 - Should retry logic be added, to supplement if requests has failed
+- From the data retreive from cuisines, what data points are considered valid

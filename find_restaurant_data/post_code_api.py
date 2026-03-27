@@ -7,6 +7,8 @@ API_URL = "https://uk.api.just-eat.io/discovery/uk/restaurants/enriched/bypostco
 user_agent = "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Mobile Safari/537.36"
 headers = {"User-Agent": user_agent}
 
+NON_CUISINE_CATEGORIES = ('Beauty', 'Convenience', 'Collect stamps', 'Flowers', 'Shops', 'Pharmacy', 'Deals', 'Lunch', 'Freebies')
+
 class POST_CODE_API:
 
     # check if the postcode is valid based on UK format
@@ -49,7 +51,7 @@ class POST_CODE_API:
         extracted_data_points = {}
         for restaurant in filtered_restaurants_data:
             id = restaurant.get("id")
-            cuisines = [cuisine for cuisine in restaurant.get("cuisines")]
+            cuisines = [cuisine["name"] for cuisine in restaurant.get("cuisines") if cuisine["name"] not in NON_CUISINE_CATEGORIES ]
             rating = restaurant.get("rating").get("starRating")
             address = restaurant.get("address")
             full_address = ", ".join(
@@ -81,3 +83,4 @@ if  __name__ == '__main__':
     filtered_data = pc_api.filter_received_data(data)
     temp = pc_api.extract_relevant_data_points(filtered_data)
     print(temp)
+    
