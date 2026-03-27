@@ -12,7 +12,7 @@ class POST_CODE_API:
     # check if the postcode is valid based on UK format
     def validate_postcode(self, postcode: str) -> bool:
         if not postcode or not isinstance(postcode, str):
-            return False
+            raise ValueError(f"Invalid postcode: {postcode}")        
         pattern = (
             r"^("
             r"GIR 0AA|"  # Special postcode
@@ -20,16 +20,14 @@ class POST_CODE_API:
             r"[A-PR-UWYZ][A-HK-Y][0-9][0-9ABEHMNPRV-Y]?))"  # AA9, AA9A
             r"\s?[0-9][ABD-HJLNP-UW-Z]{2}$"  # Inward code
         )
-        return bool(re.match(pattern=pattern, string=postcode))
-
-    # check response status code
-    def check_response_status_code(self, status) -> bool:
-        return status == 200
+        if not re.match(pattern=pattern, string=postcode):
+            raise ValueError(f"Invalid postcode format: {postcode}")
+        return True
+        # return bool(re.match(pattern=pattern, string=postcode))
 
     # send a 'get' requests ot the api using a postcode
     def get_postcode_data(self, url: str, postcode: str) -> dict:
-        if not self.validate_postcode(postcode):
-            raise ValueError(f"Invalid postcode: {postcode}")
+        self.validate_postcode(postcode)
         try:
             response = requests.get(url=f"{url}{postcode}", headers=headers)
             if not self.check_response_status_code(response.status_code):
@@ -37,6 +35,10 @@ class POST_CODE_API:
             return response.json()
         except requests.RequestException as e:
             raise Exception(f"API request failed: {e}")
+
+    # check response status code
+    def check_response_status_code(self, status) -> bool:
+        return status == 200
 
     # filter the received data to focus on restaurant data
     def filter_received_data(self, data: dict) -> list:
