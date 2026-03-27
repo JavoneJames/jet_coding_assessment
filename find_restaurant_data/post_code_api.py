@@ -25,7 +25,6 @@ class POST_CODE_API:
         
     # send a 'get' requests ot the api using a postcode
     def get_postcode_data(self, url: str, postcode: str) -> dict:
-        self.validate_postcode(postcode)
         try:
             response = requests.get(url=f"{url}{postcode}", headers=headers)
             if not self.check_response_status_code(response.status_code):
@@ -77,6 +76,7 @@ class POST_CODE_API:
 
 if  __name__ == '__main__':
     pc_api = POST_CODE_API()
+    pc_api.validate_postcode(POST_CODE)
     data = pc_api.get_postcode_data(API_URL, POST_CODE)
     filtered_data = pc_api.filter_received_data(data)
     temp = pc_api.extract_relevant_data_points(filtered_data)
