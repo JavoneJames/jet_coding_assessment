@@ -53,24 +53,23 @@ class POST_CODE_API:
             id = restaurant.get("id")
             cuisines = [cuisine["name"] for cuisine in restaurant.get("cuisines") if cuisine["name"] not in NON_CUISINE_CATEGORIES ]
             rating = restaurant.get("rating").get("starRating")
+            print(restaurant.get("address"))
             address = restaurant.get("address")
             full_address = ", ".join(
                 part
                 for part in [
                     address.get("firstLine"),
                     address.get("city"),
-                    address.get("postCode"),
+                    address.get("postalCode"),
                 ]
                 if part
             )
-
             extracted_data_points[id] = {
                 "name": restaurant.get("name"),
                 "cuisines": cuisines,
                 "rating": rating,
                 "address": full_address,
             }
-
             if len(extracted_data_points) == 10:
                 break
 
