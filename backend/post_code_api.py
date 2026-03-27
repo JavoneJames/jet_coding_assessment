@@ -7,14 +7,24 @@ API_URL = "https://uk.api.just-eat.io/discovery/uk/restaurants/enriched/bypostco
 user_agent = "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Mobile Safari/537.36"
 headers = {"User-Agent": user_agent}
 
-NON_CUISINE_CATEGORIES = ('Beauty', 'Convenience', 'Collect stamps', 'Flowers', 'Shops', 'Pharmacy', 'Deals', 'Lunch', 'Freebies')
+NON_CUISINE_CATEGORIES = (
+    "Beauty",
+    "Convenience",
+    "Collect stamps",
+    "Flowers",
+    "Shops",
+    "Pharmacy",
+    "Deals",
+    "Lunch",
+    "Freebies",
+)
+
 
 class POST_CODE_API:
-
     # check if the postcode is valid based on UK format
     def validate_postcode(self, postcode: str):
         if not postcode or not isinstance(postcode, str):
-            raise ValueError(f"Invalid postcode: {postcode}")        
+            raise ValueError(f"Invalid postcode: {postcode}")
         pattern = (
             r"^("
             r"GIR 0AA|"  # Special postcode
@@ -24,7 +34,7 @@ class POST_CODE_API:
         )
         if not re.match(pattern=pattern, string=postcode):
             raise ValueError(f"Invalid postcode format: {postcode}")
-        
+
     # send a 'get' requests ot the api using a postcode
     def get_postcode_data(self, url: str, postcode: str) -> dict:
         try:
@@ -51,7 +61,11 @@ class POST_CODE_API:
         extracted_data_points = {}
         for restaurant in filtered_restaurants_data:
             id = restaurant.get("id")
-            cuisines = [cuisine["name"] for cuisine in restaurant.get("cuisines") if cuisine["name"] not in NON_CUISINE_CATEGORIES ]
+            cuisines = [
+                cuisine["name"]
+                for cuisine in restaurant.get("cuisines")
+                if cuisine["name"] not in NON_CUISINE_CATEGORIES
+            ]
             rating = restaurant.get("rating").get("starRating")
             print(restaurant.get("address"))
             address = restaurant.get("address")
@@ -74,7 +88,7 @@ class POST_CODE_API:
                 break
 
         return extracted_data_points
-    
+
     # print restaurants info to console
     def print_restaurants_info(self, restaurants_data):
         for restaurant in restaurants_data.values():
@@ -84,11 +98,11 @@ class POST_CODE_API:
             print(f"Address: {restaurant['address']}")
             print("-" * 40)
 
-if  __name__ == '__main__':
+
+if __name__ == "__main__":
     pc_api = POST_CODE_API()
     pc_api.validate_postcode(POST_CODE)
     received_data = pc_api.get_postcode_data(API_URL, POST_CODE)
     filtered_data = pc_api.filter_received_data(received_data)
     restaurants_data = pc_api.extract_relevant_data_points(filtered_data)
-    pc_api.print_restaurants_info(restaurants_data) 
-    
+    pc_api.print_restaurants_info(restaurants_data)
