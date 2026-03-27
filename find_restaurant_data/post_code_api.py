@@ -26,7 +26,7 @@ class POST_CODE_API:
     # send a 'get' requests ot the api using a postcode
     def get_postcode_data(self, url: str, postcode: str) -> dict:
         try:
-            response = requests.get(url=f"{url}{postcode}", headers=headers)
+            response = requests.get(url=f"{url}{postcode.strip()}", headers=headers)
             if not self.check_response_status_code(response.status_code):
                 raise RuntimeError(f"Invalid status code: {response.status_code}")
             return response.json()
