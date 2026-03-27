@@ -53,34 +53,42 @@ class POST_CODE_API:
             id = restaurant.get("id")
             cuisines = [cuisine["name"] for cuisine in restaurant.get("cuisines") if cuisine["name"] not in NON_CUISINE_CATEGORIES ]
             rating = restaurant.get("rating").get("starRating")
+            print(restaurant.get("address"))
             address = restaurant.get("address")
             full_address = ", ".join(
                 part
                 for part in [
                     address.get("firstLine"),
                     address.get("city"),
-                    address.get("postCode"),
+                    address.get("postalCode"),
                 ]
                 if part
             )
-
             extracted_data_points[id] = {
                 "name": restaurant.get("name"),
                 "cuisines": cuisines,
                 "rating": rating,
                 "address": full_address,
             }
-
             if len(extracted_data_points) == 10:
                 break
 
         return extracted_data_points
+    
+    # print restaurants info to console
+    def print_restaurants_info(self, restaurants_data):
+        for restaurant in restaurants_data.values():
+            print(f"Name: {restaurant['name']}")
+            print(f"Cuisines: {', '.join(restaurant['cuisines'])}")
+            print(f"Rating: {restaurant['rating']}")
+            print(f"Address: {restaurant['address']}")
+            print("-" * 40)
 
 if  __name__ == '__main__':
     pc_api = POST_CODE_API()
     pc_api.validate_postcode(POST_CODE)
-    data = pc_api.get_postcode_data(API_URL, POST_CODE)
-    filtered_data = pc_api.filter_received_data(data)
-    temp = pc_api.extract_relevant_data_points(filtered_data)
-    print(temp)
+    received_data = pc_api.get_postcode_data(API_URL, POST_CODE)
+    filtered_data = pc_api.filter_received_data(received_data)
+    restaurants_data = pc_api.extract_relevant_data_points(filtered_data)
+    pc_api.print_restaurants_info(restaurants_data) 
     
