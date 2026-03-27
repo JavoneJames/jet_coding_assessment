@@ -10,7 +10,7 @@ headers = {"User-Agent": user_agent}
 class POST_CODE_API:
 
     # check if the postcode is valid based on UK format
-    def validate_postcode(self, postcode: str) -> bool:
+    def validate_postcode(self, postcode: str):
         if not postcode or not isinstance(postcode, str):
             raise ValueError(f"Invalid postcode: {postcode}")        
         pattern = (
@@ -22,9 +22,7 @@ class POST_CODE_API:
         )
         if not re.match(pattern=pattern, string=postcode):
             raise ValueError(f"Invalid postcode format: {postcode}")
-        return True
-        # return bool(re.match(pattern=pattern, string=postcode))
-
+        
     # send a 'get' requests ot the api using a postcode
     def get_postcode_data(self, url: str, postcode: str) -> dict:
         self.validate_postcode(postcode)
