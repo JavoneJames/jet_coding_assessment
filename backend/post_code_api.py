@@ -1,6 +1,8 @@
 import requests
 import re
 
+from backend.models import restaurant_data_model
+
 POST_CODE = "EC4M7RF"
 API_URL = "https://uk.api.just-eat.io/discovery/uk/restaurants/enriched/bypostcode/"
 
@@ -55,11 +57,24 @@ class POST_CODE_API:
         if not restaurants:
             raise ValueError("Restaurant object is empty")
         return restaurants
+    
+    # filter retrieved data by cuisine type
+    def filter_by_cuisine(self, restaurants_data: list, cuisine_type:str) -> list:
+        if not cuisine_type:
+            return restaurants_data
+        filtered_cuisines = []
+        for restaurant in restaurants_data:
+            for cuisine in restaurant.get("cuisines"):
+                if cuisine["name"] not in NON_CUISINE_CATEGORIES and cuisine["name"] == cuisine_type:
+                    filtered_cuisines.append(restaurant)
+        return filtered_cuisines
+
 
     # from these restaurant object extract Name, Cuisines, Rating -as a number, and Address
-    def extract_relevant_data_points(self, filtered_restaurants_data: list) -> dict:
+    def extract_relevant_data_points(self, filtered_restaurants_data: list, cuisine_type: str = None) -> dict:
+        filtered_data = self.filter_by_cuisine(filtered_restaurants_data, cuisine_type)
         extracted_data_points = {}
-        for restaurant in filtered_restaurants_data:
+        for restaurant in filtered_data:
             id = restaurant.get("id")
             cuisines = [
                 cuisine["name"]
