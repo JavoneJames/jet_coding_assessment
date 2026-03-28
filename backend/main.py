@@ -1,10 +1,11 @@
 from fastapi import FastAPI
 from backend.post_code_api import API_URL, POST_CODE, POST_CODE_API
+from backend.models.restaurant_data_model import RestaurantModel
 
 app = FastAPI()
 pc_api = POST_CODE_API()
 
-@app.get("/restaurants")
+@app.get("/")
 def read_root():
     pc_api.validate_postcode(POST_CODE)
     received_data = pc_api.get_postcode_data(API_URL, POST_CODE)
