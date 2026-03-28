@@ -2,6 +2,7 @@ import requests
 import re
 from math import floor
 from backend.models import restaurant_data_model
+from os import getenv
 
 POST_CODE = "EC4M7RF"
 API_URL = "https://uk.api.just-eat.io/discovery/uk/restaurants/enriched/bypostcode/"
@@ -23,6 +24,10 @@ NON_CUISINE_CATEGORIES = (
 
 
 class POST_CODE_API:
+
+    def __init__(self):
+        self.api_url = getenv("API_BASE_URL", f"{API_URL}")
+
     # check if the postcode is valid based on UK format
     def validate_postcode(self, postcode: str):
         if not postcode or not isinstance(postcode, str):
@@ -38,9 +43,9 @@ class POST_CODE_API:
             raise ValueError(f"Invalid postcode format: {postcode}")
 
     # send a 'get' requests ot the api using a postcode
-    def get_postcode_data(self, url: str, postcode: str) -> dict:
+    def get_postcode_data(self, postcode: str) -> dict:
         try:
-            response = requests.get(url=f"{url}{postcode.strip()}", headers=headers)
+            response = requests.get(url=f"{self.api_url}{postcode.strip()}", headers=headers)
             if not self.check_response_status_code(response.status_code):
                 raise RuntimeError(f"Invalid status code: {response.status_code}")
             return response.json()
