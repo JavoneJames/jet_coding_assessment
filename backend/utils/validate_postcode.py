@@ -15,5 +15,5 @@ def validate_postcode(postcode: str):
         )
     if not match(pattern=pattern, string=postcode):
             raise HTTPException(status_code=400,detail=f"Invalid postcode format: {postcode}")
-
+    return postcode
 
