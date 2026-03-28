@@ -1,6 +1,6 @@
 import requests
 import re
-
+from math import floor
 from backend.models import restaurant_data_model
 
 POST_CODE = "EC4M7RF"
@@ -68,11 +68,21 @@ class POST_CODE_API:
                 if cuisine["name"] == cuisine_type:
                     filtered_cuisines.append(restaurant)
         return filtered_cuisines
-
+    
+    def filter_by_rating(self, restaurants_data, rating: int):
+        if not rating:
+            return restaurants_data
+        filtered_ratings = []
+        for restaurant in restaurants_data:
+            restaurant_rating = floor(restaurant.get("rating").get("starRating"))
+            if restaurant_rating > rating:
+                filtered_ratings.append(restaurant)
+        return filtered_ratings
 
     # from these restaurant object extract Name, Cuisines, Rating -as a number, and Address
-    def extract_relevant_data_points(self, filtered_restaurants_data: list, cuisine_type: str = None) -> dict:
+    def extract_relevant_data_points(self, filtered_restaurants_data: list, cuisine_type: str = None, rating: int = None) -> dict:
         filtered_data = self.filter_by_cuisine(filtered_restaurants_data, cuisine_type)
+        filtered_data = self.filter_by_rating(filtered_restaurants_data, rating)
         extracted_data_points = {}
         for restaurant in filtered_data:
             id = restaurant.get("id")
