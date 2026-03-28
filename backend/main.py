@@ -6,7 +6,7 @@ app = FastAPI()
 pc_api = POST_CODE_API()
 
 @app.get("/restaurants")
-def read_root():
+def get_restaurants():
     pc_api.validate_postcode(POST_CODE)
     received_data = pc_api.get_postcode_data(POST_CODE)
     filtered_data = pc_api.filter_received_data(received_data)
