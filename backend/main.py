@@ -1,32 +1,35 @@
-from fastapi import FastAPI
-from backend.post_code_api import POST_CODE, POST_CODE_API
+from fastapi import Depends, FastAPI
+from backend.post_code_api import POST_CODE_API
 from backend.models.restaurant_data_model import RestaurantModel
+from backend.utils.validate_postcode import validate_postcode
 
 app = FastAPI()
 pc_api = POST_CODE_API()
 
+
+@app.get("/")
+def home():
+    return f"<h1>HOME</h1>"
+
 @app.get("/restaurants")
-def get_restaurants():
-    pc_api.validate_postcode(POST_CODE)
-    received_data = pc_api.get_postcode_data(POST_CODE)
+def get_restaurants(post_code: str = Depends(validate_postcode)):
+    received_data = pc_api.get_postcode_data(post_code)
     filtered_data = pc_api.filter_received_data(received_data)
     restaurants_data = pc_api.extract_relevant_data_points(filtered_data)
     return restaurants_data 
 
 
 @app.get("/restaurants/cuisines_types")
-def get_by_cuisines():
-    pc_api.validate_postcode(POST_CODE)
-    received_data = pc_api.get_postcode_data(POST_CODE)
+def get_by_cuisines(post_code: str, cuisine_type: str):
+    received_data = pc_api.get_postcode_data(post_code)
     filtered_data = pc_api.filter_received_data(received_data)
-    restaurants_data = pc_api.extract_relevant_data_points(filtered_data, "Burgers")
+    restaurants_data = pc_api.extract_relevant_data_points(filtered_data, cuisine_type=cuisine_type)
     return restaurants_data 
 
 @app.get("/restaurants/ratings")
-def get_by_ratings():
-    pc_api.validate_postcode(POST_CODE)
-    received_data = pc_api.get_postcode_data(POST_CODE)
+def get_by_ratings(post_code: str, rating: int):
+    received_data = pc_api.get_postcode_data(post_code)
     filtered_data = pc_api.filter_received_data(received_data)
-    restaurants_data = pc_api.extract_relevant_data_points(filtered_data, rating=4)
+    restaurants_data = pc_api.extract_relevant_data_points(filtered_data, rating=rating)
     return restaurants_data 
 

@@ -1,5 +1,4 @@
 import requests
-import re
 from math import floor
 from backend.models import restaurant_data_model
 from os import getenv
@@ -27,20 +26,6 @@ class POST_CODE_API:
 
     def __init__(self):
         self.api_url = getenv("API_BASE_URL", f"{API_URL}")
-
-    # check if the postcode is valid based on UK format
-    def validate_postcode(self, postcode: str):
-        if not postcode or not isinstance(postcode, str):
-            raise ValueError(f"Invalid postcode: {postcode}")
-        pattern = (
-            r"^("
-            r"GIR 0AA|"  # Special postcode
-            r"(?:[A-PR-UWYZ][0-9][0-9A-HJKSTUW]?|"  # A9, A9A
-            r"[A-PR-UWYZ][A-HK-Y][0-9][0-9ABEHMNPRV-Y]?))"  # AA9, AA9A
-            r"\s?[0-9][ABD-HJLNP-UW-Z]{2}$"  # Inward code
-        )
-        if not re.match(pattern=pattern, string=postcode):
-            raise ValueError(f"Invalid postcode format: {postcode}")
 
     # send a 'get' requests ot the api using a postcode
     def get_postcode_data(self, postcode: str) -> dict:
