@@ -65,7 +65,7 @@ class POST_CODE_API:
         filtered_cuisines = []
         for restaurant in restaurants_data:
             for cuisine in restaurant.get("cuisines"):
-                if cuisine["name"] not in NON_CUISINE_CATEGORIES and cuisine["name"] == cuisine_type:
+                if cuisine["name"] == cuisine_type:
                     filtered_cuisines.append(restaurant)
         return filtered_cuisines
 
