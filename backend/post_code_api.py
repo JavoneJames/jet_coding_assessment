@@ -23,6 +23,7 @@ NON_CUISINE_CATEGORIES = (
 
 
 class POST_CODE_API:
+
     def __init__(self):
         self.api_url = getenv("API_BASE_URL", f"{API_URL}")
 
@@ -88,7 +89,6 @@ class POST_CODE_API:
                 if cuisine["name"] not in NON_CUISINE_CATEGORIES
             ]
             rating = restaurant.get("rating").get("starRating")
-            print(restaurant.get("address"))
             address = restaurant.get("address")
             full_address = ", ".join(
                 part

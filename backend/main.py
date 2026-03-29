@@ -24,7 +24,6 @@ async def read_root(request: Request):
 
 @app.get("/restaurants/{postcode}")
 def get_restaurants(postcode: str = Depends(validate_postcode)):
-    print(postcode)
     try:
         received_data = pc_api.get_postcode_data(postcode)
         filtered_data = pc_api.filter_received_data(received_data)
