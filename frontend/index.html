@@ -4,45 +4,52 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>JET Coding Assessment</title>
-		    <link href="{{ url_for('static', path='/home_styles.css') }}" rel="stylesheet">
-    </head>
+    <link
+      href="{{ url_for('static', path='/home_styles.css') }}"
+      rel="stylesheet"
+    />
+  </head>
   <body>
-
     <div style="text-align: center">
       <h1 id="text-display-above-search-bar">Search for Restaurants</h1>
       <input type="text" id="search-bar" placeholder="Enter postcode..." />
-			<span id="search-button-span"><button id="search-button" onClick>Search</button></span>
-			<label id="display-error" style = "display: block; color: red"></label>
+      <span id="search-button-span"
+        ><button id="search-button" onClick>Search</button></span
+      >
+      <label id="display-error" style="display: block; color: red"></label>
     </div>
 
+    <script>
+      const button = document.getElementById("search-button");
+      const inputText = document.getElementById("search-bar");
+      const displayError = document.getElementById("display-error");
 
-		<script>
-			const button = document.getElementById("search-button");
-			const inputText = document.getElementById("search-bar");
-			const displayError = document.getElementById("display-error");
+      button.addEventListener("click", async () => {
+        try {
+          const userInput = inputText.value.trim();
+          if (!userInput) {
+            displayError.textContent = "Please enter a postcode";
+            console.log("no input");
+            return;
+          }
+          displayError.textContent = "";
+          const res = await fetch(
+            `http://127.0.0.1:8000/restaurants/${encodeURIComponent(userInput)}`,
+          );
+          if (!res.ok) throw new Error(`Server error: ${res.status}`);
+          const data = await res.json();
+          const restaurants = Object.values(data);
 
-			button.addEventListener("click", async () => {
-				try {
-					const userInput = inputText.value.trim();
-					if (!userInput) {
-						displayError.textContent = "Please enter a postcode";
-						console.log("no input")
-						return
-					}
-					displayError.textContent = "";
-					const res = await fetch(`http://127.0.0.1:8000/restaurants/${encodeURIComponent(userInput)}`);
-					if (!res.ok) throw new Error(`Server error: ${res.status}`);
-					const data = await res.json();
-					const restaurants = Object.values(data)
-					if (data.length == 0) displayError.textContent = `No restaurants found near ${postcode}`  
-			    document.getElementById("display-error").textContent = "";
-				}
-				catch (err) {
-					console.error("error", err);
-					displayError.textContent = err.message;
-				}
-			});
-		</script>
-
+          if (restaurants.length == 0) {
+            displayError.textContent = `No restaurants found near ${userInput}`;
+          } else {
+            document.getElementById("display-error").textContent = "";
+          }
+        } catch (err) {
+          console.error("error", err);
+          displayError.textContent = err.message;
+        }
+      });
+    </script>
   </body>
 </html>
