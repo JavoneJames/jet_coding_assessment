@@ -4,12 +4,17 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>JET Coding Assessment</title>
-    <link href="/static/css/home_styles.css" rel="stylesheet" />
+    <link href="/static/css/result.css" rel="stylesheet" />
     <script src="/static/js/result.js" defer></script>
   </head>
   <body>
-    <div style="text-align: center">
-      <h1>Results of Restaurants</h1>
+		<h1>Results of Restaurants</h1>
+		<!-- TODO add search functonality -->
+		<div id="search-bar-container">
+			<input type="text" id="search-bar" placeholder="Looking for anything?"></input>
+			<button>Search</button>
+		</div>
+    <div id="restaurants-display-div">
       <label id="display-error"></label>
       <ul id="results"></ul>
       <template id="restaurant-template">
