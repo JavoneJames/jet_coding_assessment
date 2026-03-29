@@ -1,0 +1,29 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #33332e;
+}
+#text-display-above-search-bar {
+  color: white;
+}
+#search-bar {
+  margin: 20px;
+  width: 300px;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+#search-button {
+  padding: 10px 15px;
+  background-color: #f36805;
+  border-color: #f36805;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+#search-button:hover {
+  filter: brightness(85%);
+}
