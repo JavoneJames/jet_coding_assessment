@@ -1,3 +1,4 @@
+from typing import Annotated
 from fastapi import Depends, FastAPI, HTTPException, Request
 from backend.post_code_api import POST_CODE_API
 from backend.models.restaurant_data_model import RestaurantData
@@ -15,6 +16,7 @@ app = FastAPI()
 #     allow_headers=["*"],
 # )
 pc_api = POST_CODE_API()
+app.mount("/frontend", StaticFiles(directory="frontend"), name="frontend")
 app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="frontend")
 
@@ -23,7 +25,7 @@ async def read_root(request: Request):
     return templates.TemplateResponse(request=request, name="index.html")
 
 @app.get("/restaurants/{postcode}")
-def get_restaurants(postcode: str = Depends(validate_postcode)):
+def get_restaurants(postcode: Annotated[str, Depends(validate_postcode)]):
     try:
         received_data = pc_api.get_postcode_data(postcode)
         filtered_data = pc_api.filter_received_data(received_data)

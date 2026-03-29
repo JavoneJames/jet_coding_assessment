@@ -33,6 +33,7 @@
             return;
           }
           displayError.textContent = "";
+<<<<<<< HEAD
           const res = await fetch(
             `http://127.0.0.1:8000/restaurants/${encodeURIComponent(userInput)}`,
           );
@@ -45,6 +46,9 @@
           } else {
             document.getElementById("display-error").textContent = "";
           }
+=======
+          window.location.href = `/frontend/results.html?postcode=${encodeURIComponent(userInput)}`;
+>>>>>>> 993dc45 (feat: add redirect from home to results page for valid req query)
         } catch (err) {
           console.error("error", err);
           displayError.textContent = err.message;

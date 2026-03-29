@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JET Coding Assessment</title>
+    <link href="{{ url_for('static', path='/home_styles.css') }}" rel="stylesheet">
+  </head>
+  <body>
+    <div style="text-align: center">
+      <h1>Results of Restaurants</h1>
+      <label id="display-error"></label>
+      <div id="results"></div>
+    </div>
+
+    <script>
+      const resultsDiv = document.getElementById("results");
+      const displayError = document.getElementById("display-error");
+
+      // get postcode from query string
+      const urlParams = new URLSearchParams(window.location.search);
+      const postcode = urlParams.get("postcode");
+      console.log(postcode);
+      if (!postcode) {
+        displayError.textContent = "No postcode provided.";
+      } else {
+        fetch(
+          `/restaurants/${encodeURIComponent(postcode)}`,
+        )
+          .then((res) => {
+            if (!res.ok) throw new Error(`Server error: ${res.status}`);
+            return res.json();
+          })
+          .then((data) => {
+            const restaurants = Object.values(data);
+            console.log(restaurants);
+            //TODO render result to the page here
+          })
+          .catch((err) => {
+            console.error("Error fetching restaurants:", err);
+            displayError.textContent = err.message;
+          });
+      }
+    </script>
+  </body>
+</html>
