@@ -5,55 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>JET Coding Assessment</title>
     <link
-      href="{{ url_for('static', path='/home_styles.css') }}"
+      href="{{ url_for('static', path='/css/home_styles.css') }}"
       rel="stylesheet"
     />
+    <script src="{{ url_for('static', path='/js/button.js') }}" defer></script>
   </head>
   <body>
     <div style="text-align: center">
       <h1 id="text-display-above-search-bar">Search for Restaurants</h1>
       <input type="text" id="search-bar" placeholder="Enter postcode..." />
       <span id="search-button-span"
-        ><button id="search-button" onClick>Search</button></span
+        ><button id="search-button">Search</button></span
       >
       <label id="display-error" style="display: block; color: red"></label>
     </div>
-
-    <script>
-      const button = document.getElementById("search-button");
-      const inputText = document.getElementById("search-bar");
-      const displayError = document.getElementById("display-error");
-
-      button.addEventListener("click", async () => {
-        try {
-          const userInput = inputText.value.trim();
-          if (!userInput) {
-            displayError.textContent = "Please enter a postcode";
-            console.log("no input");
-            return;
-          }
-          displayError.textContent = "";
-<<<<<<< HEAD
-          const res = await fetch(
-            `http://127.0.0.1:8000/restaurants/${encodeURIComponent(userInput)}`,
-          );
-          if (!res.ok) throw new Error(`Server error: ${res.status}`);
-          const data = await res.json();
-          const restaurants = Object.values(data);
-
-          if (restaurants.length == 0) {
-            displayError.textContent = `No restaurants found near ${userInput}`;
-          } else {
-            document.getElementById("display-error").textContent = "";
-          }
-=======
-          window.location.href = `/frontend/results.html?postcode=${encodeURIComponent(userInput)}`;
->>>>>>> 993dc45 (feat: add redirect from home to results page for valid req query)
-        } catch (err) {
-          console.error("error", err);
-          displayError.textContent = err.message;
-        }
-      });
-    </script>
   </body>
 </html>

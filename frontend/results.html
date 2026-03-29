@@ -4,21 +4,24 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>JET Coding Assessment</title>
-    <link href="{{ url_for('static', path='/backend/home_styles.css') }}" rel="stylesheet">
+    <link
+      href="{{ url_for('static', path='/backend/home_styles.css') }}"
+      rel="stylesheet"
+    />
   </head>
   <body>
-
     <div style="text-align: center">
       <h1>Results of Restaurants</h1>
       <label id="display-error"></label>
       <ul id="results"></ul>
-			<template id="restaurant-template">
-				<li class="restaurant-item">
-					<strong class="name"></strong> (<span class="rating">U+2B50</span>)<br>
-					Cuisines: <span class="cuisines"></span><br>
-					Address: <span class="address"></span>
-				</li>
-			</template>
+      <template id="restaurant-template">
+        <li class="restaurant-item">
+          <strong class="name"></strong> (<span class="rating">U+2B50</span
+          >)<br />
+          Cuisines: <span class="cuisines"></span><br />
+          Address: <span class="address"></span>
+        </li>
+      </template>
     </div>
 
     <script>
@@ -33,9 +36,7 @@
       if (!postcode) {
         displayError.textContent = "No postcode provided.";
       } else {
-        fetch(
-          `/restaurants/${encodeURIComponent(postcode)}`,
-        )
+        fetch(`/restaurants/${encodeURIComponent(postcode)}`)
           .then((res) => {
             if (!res.ok) throw new Error(`Server error: ${res.status}`);
             return res.json();
@@ -43,19 +44,21 @@
           .then((data) => {
             const restaurants = Object.values(data);
             console.log(restaurants);
-						if (restaurants.length === 0) {
-							displayError.textContent = `No restaurants found near ${postcode}`;
-							return;
-						} 
-						resultsDiv.innerHTMl = "";
-						restaurants.forEach(restaurant => {
-                const clone = template.content.cloneNode(true);
-                clone.querySelector(".name").textContent = restaurant.name;
-								clone.querySelector(".cuisines").textContent = restaurant.cuisines.join(", ");
-                clone.querySelector(".rating").textContent = restaurant.rating;
-                clone.querySelector(".address").textContent = restaurant.address;
-                resultsDiv.appendChild(clone);
-            });          })
+            if (restaurants.length === 0) {
+              displayError.textContent = `No restaurants found near ${postcode}`;
+              return;
+            }
+            resultsDiv.innerHTMl = "";
+            restaurants.forEach((restaurant) => {
+              const clone = template.content.cloneNode(true);
+              clone.querySelector(".name").textContent = restaurant.name;
+              clone.querySelector(".cuisines").textContent =
+                restaurant.cuisines.join(", ");
+              clone.querySelector(".rating").textContent = restaurant.rating;
+              clone.querySelector(".address").textContent = restaurant.address;
+              resultsDiv.appendChild(clone);
+            });
+          })
           .catch((err) => {
             console.error("Error fetching restaurants:", err);
             displayError.textContent = err.message;
