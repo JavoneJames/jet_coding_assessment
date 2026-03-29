@@ -2,11 +2,18 @@ from fastapi import Depends, FastAPI, HTTPException, Request
 from backend.post_code_api import POST_CODE_API
 from backend.models.restaurant_data_model import RestaurantData
 from backend.utils.validate_postcode import validate_postcode
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
 app = FastAPI()
+# app.add_middleware(
+#     CORSMiddleware,
+#     allow_origins=["*"], 
+#     allow_methods=["*"],
+#     allow_headers=["*"],
+# )
 pc_api = POST_CODE_API()
 app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="frontend")
@@ -17,6 +24,7 @@ async def read_root(request: Request):
 
 @app.get("/restaurants/{postcode}")
 def get_restaurants(postcode: str = Depends(validate_postcode)):
+    print(postcode)
     try:
         received_data = pc_api.get_postcode_data(postcode)
         filtered_data = pc_api.filter_received_data(received_data)

@@ -12,9 +12,26 @@
       <h1 id="text-display-above-search-bar">Search for Restaurants</h1>
       <input type="text" id="search-bar" placeholder="Enter postcode..." />
       <span id="search-button-span"
-        ><button id="search-button">Search</button></span
+        ><button id="search-button" onClick>Search</button></span
       >
     </div>
+
+
+		<script>
+			const button = document.getElementById("search-button");
+			const inputText = document.getElementById("search-bar")
+			button.addEventListener("click", async () => {
+				try {
+					userInput = inputText.value;
+					const res = await fetch(`http://127.0.0.1:8000/restaurants/${encodeURIComponent(userInput)}`);
+					const data = await res.json();
+					console.log(data);
+				}
+				catch (err) {
+					console.error("error", err);
+				}
+			});
+		</script>
 
   </body>
 </html>
