@@ -39,8 +39,16 @@ function renderRestaurants(fetchedRestaurants) {
 
 function filterSearchResults(fetchedRestaurants, search) {
   if (!fetchedRestaurants) return restaurants;
+
   return Object.values(fetchedRestaurants).filter((restaurant) => {
-    return restaurant.name.toLowerCase().includes(search.toLowerCase());
+    const nameMatch = restaurant.name
+      .toLowerCase()
+      .includes(search.toLowerCase());
+    const cuisineMatch = restaurant.cuisines
+      .join(", ")
+      .toLowerCase()
+      .includes(search.toLowerCase());
+    return nameMatch || cuisineMatch;
   });
 }
 
