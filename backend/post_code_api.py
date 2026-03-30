@@ -1,6 +1,4 @@
 import requests
-from math import floor
-from backend.models import restaurant_data_model
 from os import getenv
 
 POST_CODE = "EC4M7RF"
@@ -31,7 +29,7 @@ class POST_CODE_API:
         try:
             response = requests.get(
                 url=f"{self.api_url}{postcode.strip()}", headers=headers
-             )
+            )
             if not self.check_response_status_code(response.status_code):
                 raise RuntimeError(f"Invalid status code: {response.status_code}")
             return response.json()
@@ -50,7 +48,7 @@ class POST_CODE_API:
         return restaurants
 
     # from these restaurant object extract Name, Cuisines, Rating -as a number, and Address
-    def extract_relevant_data_points(self, filtered_restaurants_data: list ) -> dict:
+    def extract_relevant_data_points(self, filtered_restaurants_data: list) -> dict:
         extracted_data_points = {}
         for restaurant in filtered_restaurants_data:
             id = restaurant.get("id")

@@ -3,7 +3,7 @@ from fastapi import Depends, FastAPI, HTTPException, Request
 from backend.post_code_api import POST_CODE_API
 from backend.models.restaurant_data_model import RestaurantData
 from backend.utils.validate_postcode import validate_postcode
-from fastapi.middleware.cors import CORSMiddleware
+# from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
@@ -11,7 +11,7 @@ from fastapi.templating import Jinja2Templates
 app = FastAPI()
 # app.add_middleware(
 #     CORSMiddleware,
-#     allow_origins=["*"], 
+#     allow_origins=["*"],
 #     allow_methods=["*"],
 #     allow_headers=["*"],
 # )
@@ -34,3 +34,4 @@ def get_restaurants(postcode: Annotated[str, Depends(validate_postcode)]):
         return validated_data
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
+
