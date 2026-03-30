@@ -4,20 +4,17 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>JET Coding Assessment</title>
-    <link
-      href="{{ url_for('static', path='/css/home_styles.css') }}"
-      rel="stylesheet"
-    />
+    <link href="{{ url_for('static', path='/css/home_styles.css') }}" rel="stylesheet" />
     <script src="{{ url_for('static', path='/js/button.js') }}" defer></script>
   </head>
   <body>
-    <div style="text-align: center">
+    <div>
       <h1 id="text-display-above-search-bar">Search for Restaurants</h1>
+    </div>
+    <div style="text-align: center">
       <input type="text" id="search-bar" placeholder="Enter postcode..." />
-      <span id="search-button-span"
-        ><button id="search-button">Search</button></span
-      >
-      <label id="display-error" style="display: block; color: red"></label>
+      <button id="search-button">Search</button>
+      <label id="display-error"></label>
     </div>
   </body>
 </html>
