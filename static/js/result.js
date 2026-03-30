@@ -67,10 +67,29 @@ function searchHandler(fetchedRestaurants) {
   });
 }
 
+function ratingHandler(fetchedRestaurants) {
+  const ratingContainer = document.getElementById("rating-options");
+  if (!ratingContainer) return;
+  const inputs = ratingContainer.getElementsByTagName("input");
+  const checkboxes = Array.from(inputs).filter(
+    (input) => input.type === "checkbox",
+  );
+
+  checkboxes.forEach((checkbox) => {
+    checkbox.addEventListener("change", () => {
+      const selectedRatings = checkboxes
+        .filter((cb) => cb.checked)
+        .map((cb) => Number(cb.value));
+      console.log("Selected ratings:", selectedRatings);
+    });
+  });
+}
+
 async function initialize() {
   const fetchedRestaurants = await fetchRestaurantsFromServer();
   renderRestaurants(fetchedRestaurants);
   searchHandler(fetchedRestaurants);
+  ratingHandler(fetchedRestaurants);
 }
 
 initialize();
