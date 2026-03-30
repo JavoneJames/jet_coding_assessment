@@ -23,7 +23,6 @@ NON_CUISINE_CATEGORIES = (
 
 
 class POST_CODE_API:
-
     def __init__(self):
         self.api_url = getenv("API_BASE_URL", f"{API_URL}")
 
@@ -32,7 +31,7 @@ class POST_CODE_API:
         try:
             response = requests.get(
                 url=f"{self.api_url}{postcode.strip()}", headers=headers
-            )
+             )
             if not self.check_response_status_code(response.status_code):
                 raise RuntimeError(f"Invalid status code: {response.status_code}")
             return response.json()
@@ -50,38 +49,10 @@ class POST_CODE_API:
             raise ValueError("Restaurant object is empty")
         return restaurants
 
-    # filter retrieved data by cuisine type
-    def filter_by_cuisine(self, restaurants_data: list, cuisine_type: str) -> list:
-        if not cuisine_type:
-            return restaurants_data
-        filtered_cuisines = []
-        for restaurant in restaurants_data:
-            for cuisine in restaurant.get("cuisines"):
-                if cuisine["name"] == cuisine_type:
-                    filtered_cuisines.append(restaurant)
-        return filtered_cuisines
-
-    def filter_by_rating(self, restaurants_data, rating: int):
-        if not rating:
-            return restaurants_data
-        filtered_ratings = []
-        for restaurant in restaurants_data:
-            restaurant_rating = floor(restaurant.get("rating").get("starRating"))
-            if restaurant_rating > rating:
-                filtered_ratings.append(restaurant)
-        return filtered_ratings
-
     # from these restaurant object extract Name, Cuisines, Rating -as a number, and Address
-    def extract_relevant_data_points(
-        self,
-        filtered_restaurants_data: list,
-        cuisine_type: str = None,
-        rating: int = None,
-    ) -> dict:
-        filtered_data = self.filter_by_cuisine(filtered_restaurants_data, cuisine_type)
-        filtered_data = self.filter_by_rating(filtered_restaurants_data, rating)
+    def extract_relevant_data_points(self, filtered_restaurants_data: list ) -> dict:
         extracted_data_points = {}
-        for restaurant in filtered_data:
+        for restaurant in filtered_restaurants_data:
             id = restaurant.get("id")
             cuisines = [
                 cuisine["name"]
