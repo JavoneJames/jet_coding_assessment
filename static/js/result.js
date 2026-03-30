@@ -37,16 +37,19 @@ function renderRestaurants(fetchedRestaurants) {
   });
 }
 
-function filterSearchResults(restaurants) {
-  console.log("inside filter search");
- }
+function filterSearchResults(fetchedRestaurants, search) {
+  if (!fetchedRestaurants) return restaurants;
+  return Object.values(fetchedRestaurants).filter((restaurant) => {
+    return restaurant.name.toLowerCase().includes(search.toLowerCase());
+  });
+}
 
 function searchHandler(fetchedRestaurants) {
   const searchInput = document.getElementById("search-bar");
 
   searchInput.addEventListener("input", () => {
-    const searchId = searchInput.value.toLowerCase();
-    const filteredResults = filterSearchResults(fetchedRestaurants, searchId);
+    const search = searchInput.value;
+    const filteredResults = filterSearchResults(fetchedRestaurants, search);
 
     if (filteredResults && filteredResults.length > 0) {
       renderRestaurants(filteredResults);
@@ -58,8 +61,8 @@ function searchHandler(fetchedRestaurants) {
 
 async function initialize() {
   const fetchedRestaurants = await fetchRestaurantsFromServer();
-	searchHandler(fetchedRestaurants)
   renderRestaurants(fetchedRestaurants);
+  searchHandler(fetchedRestaurants);
 }
 
 initialize();
