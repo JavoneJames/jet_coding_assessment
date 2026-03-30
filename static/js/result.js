@@ -81,6 +81,25 @@ function ratingHandler(fetchedRestaurants) {
         .filter((cb) => cb.checked)
         .map((cb) => Number(cb.value));
       console.log("Selected ratings:", selectedRatings);
+      const filteredByRating = Object.values(fetchedRestaurants).filter(
+        (restaurant) => {
+          const roundRating = Math.round(restaurant.rating);
+          return (
+            selectedRatings.length === 0 ||
+            selectedRatings.includes(roundRating)
+          );
+        },
+      );
+
+      const displayError = document.getElementById("display-error");
+      if (filteredByRating.length > 0) {
+        displayError.textContent = "";
+        renderRestaurants(filteredByRating);
+      } else {
+        displayError.textContent =
+          "No restaurants found for selected rating(s).";
+        document.getElementById("results").innerHTML = "";
+      }
     });
   });
 }
