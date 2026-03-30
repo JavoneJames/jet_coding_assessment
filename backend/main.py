@@ -24,12 +24,13 @@ templates = Jinja2Templates(directory="frontend")
 async def read_root(request: Request):
     return templates.TemplateResponse(request=request, name="index.html")
 
-@app.get("/restaurants/{postcode}")
+@app.get("/restaurants/{postcode}", response_model=RestaurantData)
 def get_restaurants(postcode: Annotated[str, Depends(validate_postcode)]):
     try:
         received_data = pc_api.get_postcode_data(postcode)
         filtered_data = pc_api.filter_received_data(received_data)
         restaurants_data = pc_api.extract_relevant_data_points(filtered_data)
-        return restaurants_data
+        validated_data = RestaurantData.model_validate(restaurants_data)
+        return validated_data
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
