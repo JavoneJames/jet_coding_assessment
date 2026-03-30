@@ -1,5 +1,4 @@
 async function fetchRestaurantsFromServer() {
-
   const urlParams = new URLSearchParams(window.location.search);
   const postcode = urlParams.get("postcode");
   const displayError = document.getElementById("display-error");
@@ -12,11 +11,9 @@ async function fetchRestaurantsFromServer() {
     console.error("Error fetching restaurants:", err);
     displayError.textContent = err.message;
   }
-
 }
 
 function renderRestaurants(fetchedRestaurants) {
-
   const resultsDiv = document.getElementById("results");
   const displayError = document.getElementById("display-error");
   const template = document.getElementById("restaurant-template");
@@ -32,19 +29,37 @@ function renderRestaurants(fetchedRestaurants) {
     const restaurant = fetchedRestaurants[key];
     const clone = template.content.cloneNode(true);
     clone.querySelector(".name").textContent = restaurant.name;
-    clone.querySelector(".cuisines").textContent = restaurant.cuisines.join(", ");
+    clone.querySelector(".cuisines").textContent =
+      restaurant.cuisines.join(", ");
     clone.querySelector(".rating").textContent = restaurant.rating;
     clone.querySelector(".address").textContent = restaurant.address;
     resultsDiv.appendChild(clone);
   });
+}
 
+function filterSearchResults(restaurants) {
+  console.log("inside filter search");
+ }
+
+function searchHandler(fetchedRestaurants) {
+  const searchInput = document.getElementById("search-bar");
+
+  searchInput.addEventListener("input", () => {
+    const searchId = searchInput.value.toLowerCase();
+    const filteredResults = filterSearchResults(fetchedRestaurants, searchId);
+
+    if (filteredResults && filteredResults.length > 0) {
+      renderRestaurants(filteredResults);
+    } else {
+      renderRestaurants(fetchedRestaurants);
+    }
+  });
 }
 
 async function initialize() {
   const fetchedRestaurants = await fetchRestaurantsFromServer();
-  if (fetchedRestaurants) {
-    renderRestaurants(fetchedRestaurants);
-  }
+	searchHandler(fetchedRestaurants)
+  renderRestaurants(fetchedRestaurants);
 }
 
 initialize();
