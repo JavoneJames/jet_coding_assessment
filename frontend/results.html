@@ -8,23 +8,45 @@
     <script src="/static/js/result.js" defer></script>
   </head>
   <body>
-		<h1>Results of Restaurants</h1>
-		<!-- TODO add search functonality -->
-		<div id="search-bar-container">
-			<input type="text" id="search-bar" placeholder="Looking for anything?"></input>
-			<button>Search</button>
-		</div>
-    <div id="restaurants-display-div">
-      <label id="display-error"></label>
-      <ul id="results"></ul>
-      <template id="restaurant-template">
-        <li class="restaurant-item">
-          <strong class="name"></strong> (<span class="rating">U+2B50</span
-          >)<br />
-          Cuisines: <span class="cuisines"></span><br />
-          Address: <span class="address"></span>
-        </li>
-      </template>
+    <h1>Results of Restaurants</h1>
+    <div id="search-bar-container">
+      <input type="text" id="search-bar" placeholder="Looking for anything?" />
+      <button>Search</button>
+    </div>
+    <div id="display-container">
+      <!-- TODO implement query functionality by rating -->
+      <div id="ratings-display-div">
+        <span>Rating</span>
+        <div id="rating-options">
+          <label>
+            <input type="checkbox" name="rating" value="1" /> 1 Star
+          </label>
+          <label>
+            <input type="checkbox" name="rating" value="2" /> 2 Stars
+          </label>
+          <label>
+            <input type="checkbox" name="rating" value="3" /> 3 Stars
+          </label>
+          <label>
+            <input type="checkbox" name="rating" value="4" /> 4 Stars
+          </label>
+          <label>
+            <input type="checkbox" name="rating" value="5" /> 5 Stars
+          </label>
+        </div>
+      </div>
+      <div id="restaurants-display-div">
+        <label id="display-error"></label>
+        <ul id="results"></ul>
+        <template id="restaurant-template">
+          <li class="restaurant-item">
+            <strong class="name"></strong> (<span class="rating">U+2B50</span
+            >)<br />
+            Cuisines: <span class="cuisines"></span><br />
+            Address: <span class="address"></span>
+          </li>
+        </template>
+      </div>
     </div>
   </body>
 </html>
