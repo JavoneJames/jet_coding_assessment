@@ -12,6 +12,7 @@ function buttonHandler() {
     const displayError = document.getElementById("display-error");
     try {
       const userInput = getUserInput();
+			console.log(userInput)
       if (!userInput) {
         displayError.textContent = "Please enter a postcode";
       } else {
