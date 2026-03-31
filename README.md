@@ -41,3 +41,53 @@ The following will probably be used to form test cases
 - What to do if a postcode is invalid
 - Should retry logic be added, to supplement if requests has failed
 - From the data retreive from cuisines, what data points are considered valid
+
+## Setup Instructions
+
+### 1. Clone the repository
+
+```
+
+    git clone https://github.com/JavoneJames/jet_coding_assessment.git
+
+    cd jet_coding_assessment
+
+````
+
+### 2. Install Dependencies
+Install uv python package manager: [Link for ways to install](https://docs.astral.sh/uv/getting-started/installation/)
+
+install project dependencies using: 
+
+``` 
+
+    uv sync
+
+```
+ 
+run virtual environment:
+
+```
+
+    source .venv/bin/activate
+
+```
+
+run project:
+
+```
+
+    fastapi dev 
+
+```
+
+project should be running on: 
+
+```
+
+    app   Using import string: backend.main:app
+
+    server   Server started at http://127.0.0.1:8000
+    server   Documentation at http://127.0.0.1:8000/docs
+
+```
