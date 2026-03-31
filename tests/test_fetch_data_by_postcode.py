@@ -1,14 +1,10 @@
 import requests
+from fastapi import HTTPException
 import pytest  # type: ignore
 from unittest.mock import patch, MagicMock
 
-from find_restaurant_data.fetch_data_by_postcode import (
-    validate_postcode,
-    get_postcode_data,
-    check_response_status_code,
-    filter_received_data,
-    extract_relevant_data_points,
-)
+from backend.post_code_api import POST_CODE_API
+from backend.utils.validate_postcode import validate_postcode 
 
 API_URL = "http://fakeurl.com/"
 POST_CODE = "SE1 9AD"
@@ -51,40 +47,42 @@ RECEIVED_DATA = {
     "enrichedLists": [],
 }
 
+pc_api = POST_CODE_API()
+pc_api.api_url = API_URL
 
 def test_validate_postcode():
-    assert validate_postcode("EC4M7RF") == True
-    assert validate_postcode("12344") == False
-    assert validate_postcode("NE97YT") == True
-    assert validate_postcode("") == False
-    assert validate_postcode(None) == False
-
+    assert validate_postcode("EC4M7RF") == "EC4M7RF"
+    assert validate_postcode("NE97YT") == "NE97YT"
+    
+    with pytest.raises(HTTPException) as exc_info:
+        validate_postcode("12344")
+    assert exc_info.value.status_code == 400
+    assert "Invalid postcode format" in str(exc_info.value.detail)
+    
+    with pytest.raises(HTTPException):
+        validate_postcode("")
 
 def test_check_response_status_code():
-    assert check_response_status_code(200) is True
-    assert check_response_status_code(401) is not True
-    assert check_response_status_code(403) is not True
-    assert check_response_status_code(408) is not True
-
+    assert pc_api.check_response_status_code(status=200)
+    assert not pc_api.check_response_status_code(status=401)
+    assert not pc_api.check_response_status_code(status=403)
+    assert not pc_api.check_response_status_code(status=408)
+    status =  pc_api.check_response_status_code(status=200)
+    assert status != 404
 
 def test_get_postcode_data():
     with (
-        patch(
-            "find_restaurant_data.fetch_data_by_postcode.validate_postcode",
-            return_value=True,
-        ),
-        patch(
-            "find_restaurant_data.fetch_data_by_postcode.check_response_status_code",
-            return_value=True,
-        ),
-        patch("find_restaurant_data.fetch_data_by_postcode.requests.get") as mock_get,
+        patch( "backend.utils.validate_postcode.validate_postcode", return_value=True),
+        patch.object(
+           POST_CODE_API, "check_response_status_code", return_value=True        ),
+        patch("backend.post_code_api.requests.get") as mock_get,
     ):
         mock_response = MagicMock()
         mock_response.status_code = 200
         mock_response.json.return_value = OBJECT_DATA
         mock_get.return_value = mock_response
 
-        data = get_postcode_data(API_URL, POST_CODE)
+        data = pc_api.get_postcode_data(postcode=POST_CODE)
 
         expected_keys = [
             "metaData",
@@ -98,23 +96,16 @@ def test_get_postcode_data():
         assert set(data.keys()) == set(expected_keys)
         mock_get.assert_called_once_with(url=f"{API_URL}{POST_CODE}", headers=headers)
 
-
 def test_filter_received_data():
-    with patch(
-        "find_restaurant_data.fetch_data_by_postcode.filter_received_data"
-    ) as mock_filter:
+    with patch.object(POST_CODE_API, "filter_received_data", return_value=RECEIVED_DATA) as mock_filter:
         mock_filter.return_value = RECEIVED_DATA
         result = mock_filter(RECEIVED_DATA)
         assert result == RECEIVED_DATA
         mock_filter.assert_called_once_with(RECEIVED_DATA)
 
-
 def test_extract_relevant_data_points():
-    with patch(
-        "find_restaurant_data.fetch_data_by_postcode.extract_relevant_data_points"
-    ) as mock_extract:
-        filtered_data = RECEIVED_DATA["restaurants"]
-        mock_extract.return_value = filtered_data
+    filtered_data = RECEIVED_DATA["restaurants"]
+    with patch.object(POST_CODE_API, "extract_relevant_data_points", return_value=filtered_data) as mock_extract:
         result = mock_extract(filtered_data)
         assert result == filtered_data
         mock_extract.assert_called_once_with(filtered_data)
