@@ -1,7 +1,7 @@
 function getUserInput() {
   const displayError = document.getElementById("display-error");
   const inputText = document.getElementById("search-bar");
-  const userInput = inputText.value.trim();
+  const userInput = inputText.value.replace(/\s+/g, '');
   return userInput;
 }
 
