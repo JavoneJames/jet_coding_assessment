@@ -109,4 +109,6 @@ copy or click on http://127.0.0.1:8000 from cli, also check cli if url is differ
 - add a spinner or loader to appear while fetching data before it is displayed to the user
 - although validation is not for postcode, should also check if postcode is real using: https://postcodes.io/endpoints
 - include caching server and client side to lessen repeated fetch requests
+- sanitise data before it is sent to the backend
+- if response fails to fetch from the server should not redirect to results page and show appropriate message
 
