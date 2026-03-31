@@ -57,6 +57,8 @@ The following will probably be used to form test cases
 ### 2. Install Dependencies
 Install uv python package manager: [Link for ways to install](https://docs.astral.sh/uv/getting-started/installation/)
 
+or if you have pip install exec: `  pip install -r requirements.txt  ` then script to run the virtual environment
+
 install project dependencies using: 
 
 ``` 
@@ -91,3 +93,7 @@ project should be running on:
     server   Documentation at http://127.0.0.1:8000/docs
 
 ```
+
+
+copy or click on http://127.0.0.1:8000 from cli, also check cli if url is different or port is in use
+
