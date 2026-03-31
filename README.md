@@ -97,3 +97,16 @@ project should be running on:
 
 copy or click on http://127.0.0.1:8000 from cli, also check cli if url is different or port is in use
 
+
+## Improvements
+- Go and analyse the response object sent from the API endpoint before planning and imeplentation
+- Do not hardcode key env variables - but considering the nature of the assessment should be fine
+- remove 'Lunch' from NON_CUISINE_CATEGORIES could be used appropriately eg display as a option around 'lunchtime'
+- refactor method 'extract_relevant_data_points' in post_code_api.py because it's quite thick
+- checking for exceptions became too generalize as the project went on, would be to go through and refactor
+- include test cases for fastapi routes
+- give some files better or more appropriate name eg 'button.js'
+- add a spinner or loader to appear while fetching data before it is displayed to the user
+- although validation is not for postcode, should also check if postcode is real using: https://postcodes.io/endpoints
+- include caching server and client side to lessen repeated fetch requests
+
