@@ -1,68 +1,69 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f9f9f9;
+  color: #333;
+}
+
 h1 {
   text-align: center;
+  margin-top: 20px;
 }
 
 #search-bar-container {
   text-align: center;
+  margin: 20px 0;
 }
 
 #search-bar-container input#search-bar {
-  padding: 6px;
-  border: none;
-  margin-top: 8px;
-  margin-right: 16px;
-  font-size: 17px;
-}
-
-#display-container {
-  display: flex;
-  justify-content: space-between;
-  max-width: 80%;
-  margin: 0 auto;
-  padding: 20px;
-}
-
-#ratings-container {
-  flex: 0 0 30%;
+  width: 90%;
+  max-width: 500px;
   padding: 10px;
-  border: 1px solid #ccc;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
+  font-size: 16px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  box-sizing: border-box;
 }
 
 #ratings-display-div {
-  width: 100%;
+  text-align: center;
+  margin-bottom: 20px;
 }
 
 #ratings-display-div span {
   font-weight: bold;
+  font-size: 32px;
   margin-bottom: 8px;
 }
 
-#rating-options {
-  text-align: left;
+#rating-options labeL {
+  font-size: 20px;
 }
 
-#restaurants-display-div {
-  flex: 0 0 65%;
-  padding: 10px;
-  border: 1px solid #ccc;
+#rating-options input[type="checkbox"] {
+  margin-right: 5px;
+  width: 18px;
+  height: 18px;
 }
 
 #display-error {
-  font-size: 14px;
+  display: block;
+  text-align: center;
+  font-size: 32px;
   color: red;
-  margin-bottom: 10px;
+  margin: 10px auto;
 }
 
 #results {
   list-style-type: none;
   padding: 0;
-  margin: 0;
+  margin: 0 auto;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
+  gap: 15px;
+  max-width: 900px;
 }
 
 .restaurant-item {
@@ -70,25 +71,24 @@ h1 {
   color: #fff;
   border-radius: 8px;
   padding: 15px;
-  margin: 10px;
   width: 280px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .restaurant-item .name {
-  font-size: 18px;
+  font-size: 22px;
   font-weight: bold;
 }
 
 .restaurant-item .rating {
-  font-size: 16px;
+  font-size: 18px;
   color: #ffcc00;
   margin-left: 5px;
 }
 
 .restaurant-item .cuisines,
 .restaurant-item .address {
-  font-size: 14px;
+  font-size: 16px;
   color: #bbb;
   margin-top: 5px;
 }
