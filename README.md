@@ -111,4 +111,4 @@ copy or click on http://127.0.0.1:8000 from cli, also check cli if url is differ
 - include caching server and client side to lessen repeated fetch requests
 - sanitise data before it is sent to the backend
 - if response fails to fetch from the server should not redirect to results page and show appropriate message
-
+- search functionality should be improved by adding fuzzy finder using: https://www.fusejs.io/
