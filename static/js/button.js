@@ -16,27 +16,37 @@ function buttonHandler() {
 
   button.addEventListener("click", async () => {
     const displayError = document.getElementById("display-error");
+
     try {
       const userInput = getUserInput();
-      validatedUserInput = validationHandler(userInput);
+      const validatedUserInput = validationHandler(userInput);
+
       if (!validatedUserInput) {
         displayError.textContent = "Please enter a valid postcode";
-      } else {
-				const res = await fetch(`/validate-postcode/${encodeURIComponent(userInput)}`);
-				if (res.status != 200){
-					displayError.textContent = "Please enter a valid postcode";
-					console.log("error")
-				}else{
-					console.log("working")
-					displayError.textContent = "";
-					window.location.href = `/frontend/results.html?postcode=${encodeURIComponent(userInput)}`;
-				}
+        return;
       }
+      const responseFromPostcodeAPI = await validatePostcodeAPI(userInput);
+      if (!responseFromPostcodeAPI) {
+        displayError.textContent = "Please enter a valid postcode";
+        return;
+      }
+
+      displayError.textContent = "";
+      redirectToResultsPage(userInput);
     } catch (err) {
       console.error("error", err);
       displayError.textContent = err.message;
     }
   });
+}
+
+async function validatePostcodeAPI(postcode) {
+  const res = await fetch(`/validate-postcode/${encodeURIComponent(postcode)}`);
+  return res.status == 200;
+}
+
+function redirectToResultsPage(postcode) {
+  window.location.href = `/frontend/results.html?postcode=${encodeURIComponent(postcode)}`;
 }
 
 buttonHandler();
