@@ -148,7 +148,7 @@ cd jet_coding_assessment
 ```
 ### 2. Install Dependencies
 
-Install uv python package manager:
+Install uv python package manager: https://docs.astral.sh/uv/getting-started/installation/
 
 #### Installation Guide
 
