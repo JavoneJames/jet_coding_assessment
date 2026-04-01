@@ -1,10 +1,8 @@
-from typing import Annotated
 from backend.post_code_api import POST_CODE_API
 from backend.models.restaurant_data_model import RestaurantData
 from backend.utils.check_postcode_is_real import check_postcode_is_real
 
 from fastapi import Depends, FastAPI, HTTPException, Request
-
 # from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
@@ -32,11 +30,9 @@ def validate_postcode(postcode: str = Depends(check_postcode_is_real)):
     return postcode
 
 @app.get("/restaurants/{postcode}", response_model=RestaurantData)
-def get_restaurants(postcode: Annotated[str, Depends(check_postcode_is_real)]):
+def get_restaurants(postcode: str = Depends(validate_postcode)):
     try:
-        received_data = pc_api.get_postcode_data(postcode)
-        filtered_data = pc_api.filter_received_data(received_data)
-        restaurants_data = pc_api.extract_relevant_data_points(filtered_data)
+        restaurants_data = pc_api.fetch_filter_extract_restaurants(postcode)
         validated_data = RestaurantData.model_validate(restaurants_data)
         return validated_data
     except Exception as e:

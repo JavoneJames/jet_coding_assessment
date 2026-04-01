@@ -82,6 +82,12 @@ class POST_CODE_API:
             if len(extracted_data_points) == 10:
                 break
         return extracted_data_points
+    
+    def fetch_filter_extract_restaurants(self, postcode: str) -> dict:
+        received_data = self.get_postcode_data(postcode)
+        filtered_data = self.filter_received_data(received_data)
+        restaurants_data = self.extract_relevant_data_points(filtered_data)
+        return restaurants_data
 
     # print restaurants info to console
     def print_restaurants_info(self, restaurants_data):
