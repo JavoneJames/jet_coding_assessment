@@ -22,8 +22,15 @@ function buttonHandler() {
       if (!validatedUserInput) {
         displayError.textContent = "Please enter a valid postcode";
       } else {
-        displayError.textContent = "";
-        window.location.href = `/frontend/results.html?postcode=${encodeURIComponent(userInput)}`;
+				const res = await fetch(`/validate-postcode/${encodeURIComponent(userInput)}`);
+				if (res.status != 200){
+					displayError.textContent = "Please enter a valid postcode";
+					console.log("error")
+				}else{
+					console.log("working")
+					displayError.textContent = "";
+					window.location.href = `/frontend/results.html?postcode=${encodeURIComponent(userInput)}`;
+				}
       }
     } catch (err) {
       console.error("error", err);
