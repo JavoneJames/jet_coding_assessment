@@ -28,8 +28,7 @@ function renderRestaurants(fetchedRestaurants) {
   Object.values(fetchedRestaurants).forEach((restaurant) => {
     const clone = template.content.cloneNode(true);
     clone.querySelector(".name").textContent = restaurant.name;
-    clone.querySelector(".cuisines").textContent =
-      restaurant.cuisines.join(", ");
+    clone.querySelector(".cuisines").textContent = restaurant.cuisines.join(", ");
     clone.querySelector(".rating").textContent = restaurant.rating;
     clone.querySelector(".address").textContent = restaurant.address;
     resultsDiv.appendChild(clone);
@@ -46,7 +45,9 @@ function searchHandler(fetchedRestaurants) {
       "name",
       { name: "cuisines", getFn: (r) => (r.cuisines || []).join(" ") },
     ],
-    threshold: 0.3,
+    threshold: 0.4,
+		minMatchCharLength: 1,
+		ignoreLocation: true,
   });
 
   searchInput.addEventListener("input", () => {
