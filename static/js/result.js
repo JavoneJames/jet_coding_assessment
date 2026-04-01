@@ -5,7 +5,7 @@ async function fetchRestaurantsFromServer() {
 
   try {
     const res = await fetch(`/restaurants/${encodeURIComponent(postcode)}`);
-    if (!res.ok) throw new Error(`Server errpr: ${res.status}`);
+    if (res.status != 200) throw new Error(`Server errpr: ${res.status}`);
     return res.json();
   } catch (err) {
     console.error("Error fetching restaurants:", err);

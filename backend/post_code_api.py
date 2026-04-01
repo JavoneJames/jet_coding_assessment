@@ -50,12 +50,17 @@ class POST_CODE_API:
     # from these restaurant object extract Name, Cuisines, Rating -as a number, and Address
     def extract_relevant_data_points(self, filtered_restaurants_data: list) -> dict:
         extracted_data_points = {}
+        non_cuisines = NON_CUISINE_CATEGORIES
+
         for restaurant in filtered_restaurants_data:
-            id = restaurant.get("id")
+
+            restaurant_id = restaurant.get("id")
+            if not restaurant_id: continue
+
             cuisines = [
                 cuisine["name"]
                 for cuisine in restaurant.get("cuisines")
-                if cuisine["name"] not in NON_CUISINE_CATEGORIES
+                if cuisine["name"] not in non_cuisines
             ]
             rating = restaurant.get("rating").get("starRating")
             address = restaurant.get("address")
@@ -68,7 +73,7 @@ class POST_CODE_API:
                 ]
                 if part
             )
-            extracted_data_points[id] = {
+            extracted_data_points[restaurant_id] = {
                 "name": restaurant.get("name"),
                 "cuisines": cuisines,
                 "rating": rating,
@@ -76,7 +81,6 @@ class POST_CODE_API:
             }
             if len(extracted_data_points) == 10:
                 break
-
         return extracted_data_points
 
     # print restaurants info to console
