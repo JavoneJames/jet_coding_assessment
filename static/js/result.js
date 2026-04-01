@@ -28,23 +28,36 @@ function renderRestaurants(fetchedRestaurants) {
   Object.values(fetchedRestaurants).forEach((restaurant) => {
     const clone = template.content.cloneNode(true);
     clone.querySelector(".name").textContent = restaurant.name;
-    clone.querySelector(".cuisines").textContent = restaurant.cuisines.join(", ");
+    clone.querySelector(".cuisines").textContent =
+      restaurant.cuisines.join(", ");
     clone.querySelector(".rating").textContent = restaurant.rating;
     clone.querySelector(".address").textContent = restaurant.address;
     resultsDiv.appendChild(clone);
   });
 }
 
-function filterSearchResults(fetchedRestaurants, search) {
-  if (!fetchedRestaurants) return fetchedRestaurants;
+function searchHandler(fetchedRestaurants) {
+  console.log(fetchedRestaurants);
+  const searchInput = document.getElementById("search-bar");
+  const restaurantsArray = Object.values(fetchedRestaurants);
 
-  return Object.values(fetchedRestaurants).filter((restaurant) => {
-    const nameMatch = restaurant.name.toLowerCase().includes(search.toLowerCase());
-    const cuisineMatch = restaurant.cuisines
-      .join(", ")
-      .toLowerCase()
-      .includes(search.toLowerCase());
-    return nameMatch || cuisineMatch;
+  const fuse = new Fuse(restaurantsArray, {
+    keys: [
+      "name",
+      { name: "cuisines", getFn: (r) => (r.cuisines || []).join(" ") },
+    ],
+    threshold: 0.3,
+  });
+
+  searchInput.addEventListener("input", () => {
+    const search = searchInput.value;
+    let filteredResults;
+    if (search) {
+      filteredResults = fuse.search(search).map((result) => result.item);
+    } else {
+      filteredResults = restaurantsArray;
+    }
+    renderFilteredRestaurants(fetchedRestaurants, filteredResults);
   });
 }
 
@@ -59,23 +72,14 @@ function renderFilteredRestaurants(fetchedRestaurants, filteredResults) {
   }
 }
 
-function searchHandler(fetchedRestaurants = []) {
-  const searchInput = document.getElementById("search-bar");
-
-  searchInput.addEventListener("input", () => {
-    const search = searchInput.value;
-    const filteredResults = filterSearchResults(fetchedRestaurants, search);
-
-    renderFilteredRestaurants(fetchedRestaurants, filteredResults);
-  });
-}
-
 function ratingHandler(fetchedRestaurants) {
   const ratingContainer = document.getElementById("rating-options");
   if (!ratingContainer) return;
 
   const inputs = ratingContainer.getElementsByTagName("input");
-  const checkboxes = Array.from(inputs).filter((input) => input.type === "checkbox");
+  const checkboxes = Array.from(inputs).filter(
+    (input) => input.type === "checkbox",
+  );
 
   checkboxes.forEach((checkbox) => {
     checkbox.addEventListener("change", () => {
@@ -84,7 +88,10 @@ function ratingHandler(fetchedRestaurants) {
         fetchedRestaurants,
         selectedRatings,
       );
-      renderFilteredRestaurants(fetchedRestaurants, filteredRestaurantsByRating);
+      renderFilteredRestaurants(
+        fetchedRestaurants,
+        filteredRestaurantsByRating,
+      );
     });
   });
 }
@@ -96,7 +103,9 @@ function getSelectedRatings(checkboxes) {
 function getFilteredRestaurantsByRating(fetchedRestaurants, selectedRatings) {
   return Object.values(fetchedRestaurants).filter((restaurant) => {
     const roundRating = Math.round(restaurant.rating);
-    return selectedRatings.length === 0 || selectedRatings.includes(roundRating);
+    return (
+      selectedRatings.length === 0 || selectedRatings.includes(roundRating)
+    );
   });
 }
 
