@@ -201,7 +201,7 @@ Check CLI output if port changes or is in use.
 ## Improvements
 - Analyse API response before planning implementation
 - Do not hardcode key environment variables (acceptable here)
-- Remove "Lunch" from NON_CUISINE_CATEGORIES — could be used as UI option
+- Remove "Lunch" from NON_CUISINE_CATEGORIES - could be used as UI option
 - Refactor extract_relevant_data_points (currently too large)
 - Improve exception handling
 - Include test cases for FastAPI routes
